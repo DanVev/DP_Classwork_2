@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Created by Vasily Danilin on 03.11.2017.
@@ -52,8 +55,16 @@ public class PlotForm {
                 super.mouseClicked(e);
                 SVGContext svgContext = new SVGContext();
                 svgContext.createSVGContent(line, line.getA(), line.getB());
+                File file = new File("./svg1.svg");
+                try {
+                    FileWriter fileWriter = new FileWriter(file);
+                    fileWriter.write(svgContext.getXML());
+                    fileWriter.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                    System.out.println("problem with file");
+                }
                 System.out.println(svgContext.getXML());
-
             }
         });
         svgButton2.addMouseListener(new MouseAdapter() {
@@ -62,8 +73,18 @@ public class PlotForm {
                 super.mouseClicked(e);
                 SVGContext svgContext = new SVGContext();
                 svgContext.createSVGContent(line, line.getA(), line.getB());
+                File file = new File("./svg2.svg");
+                try {
+                    FileWriter fileWriter = new FileWriter(file);
+                    fileWriter.write(svgContext.getXML());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
                 System.out.println(svgContext.getXML());
+
             }
+
         });
     }
 
@@ -160,10 +181,10 @@ class Canvas extends JPanel {
 
     public void paintComponent(Graphics g) {
         System.out.println("repaint...");
-        IGContext context = isDotted? new Graphics2DDottedContext(g):new Graphics2DContext(g);
+        IGContext context = isDotted ? new Graphics2DDottedContext(g) : new Graphics2DContext(g);
         super.paintComponents(g);
         if (!isFirst)
-        visualCurve.draw(context);
+            visualCurve.draw(context);
         isFirst = false;
     }
 
