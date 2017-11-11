@@ -7,4 +7,5 @@ import Contexts.IGContext;
  */
 public interface IDrawable {
     void draw(IGContext context);
+    void drawWithoutAnyPoints(IGContext context);
 }

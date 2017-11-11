@@ -1,4 +1,6 @@
 import Contexts.*;
+import Decorators.FragmentDecorator;
+import Decorators.MoveDecorator;
 import Drawable.*;
 import Drawable.Point;
 import Visual.*;
@@ -25,8 +27,8 @@ public class PlotForm {
     private JButton svgButton2;
     private Line line = new Line(new Point(10, 10), new Point(300, 350));
     private Bezier bezier = new Bezier(new Point(10, 10), new Point(200, 300), new Point(300, 150), new Point(380, 380));
-    private VisualLine visualLine = new VisualLine(line);
-    private VisualBezier visualBezier = new VisualBezier(bezier);
+    private VisualCurve visualLine = new VisualCurve(line);
+    private VisualCurve visualBezier = new VisualCurve(bezier);
     private Canvas canvas1 = new Canvas(visualLine);
     private Canvas canvas2 = new Canvas(visualBezier);
 
@@ -88,16 +90,6 @@ public class PlotForm {
         frame.setContentPane(plotForm.jPanelGeneral);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
-
-        Line line = new Line(new Point(10, 10), new Point(300, 350));
-        Bezier bezier = new Bezier(new Point(10, 10), new Point(200, 300), new Point(300, 150), new Point(380, 380));
-        VisualLine visualLine = new VisualLine(line);
-        VisualBezier visualBezier = new VisualBezier(bezier);
-
-        IGContext consoleContext = new ConsoleContext();
-        visualLine.draw(consoleContext);
-        visualBezier.draw(consoleContext);
-
         frame.setVisible(true);
 
     }
@@ -132,8 +124,8 @@ public class PlotForm {
         dottedPaintRadioButton = new JRadioButton();
         dottedPaintRadioButton.setText("Dotted Paint");
         jPanelGeneral.add(dottedPaintRadioButton, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        jPanelGeneral.add(jPanel2, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(400, 400), new Dimension(400, 400), null, 0, false));
-        jPanelGeneral.add(jPanel1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(400, 400), new Dimension(400, 400), null, 0, false));
+        jPanelGeneral.add(jPanel2, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(500, 500), new Dimension(500, 500), null, 0, false));
+        jPanelGeneral.add(jPanel1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(500, 500), new Dimension(500, 500), null, 0, false));
         final JLabel label1 = new JLabel();
         label1.setText("Line Curve");
         jPanelGeneral.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -169,16 +161,20 @@ class Canvas extends JPanel {
 
     public Canvas(VisualCurve visualCurve) {
         super();
-        setPreferredSize(new Dimension(400, 400));
+        setPreferredSize(new Dimension(500, 500));
         this.visualCurve = visualCurve;
     }
 
     public void paintComponent(Graphics g) {
-        System.out.println("repaint...");
+        //System.out.println("repaint...");
         IGContext context = isDotted ? new Graphics2DDottedContext(g) : new Graphics2DContext(g);
         super.paintComponents(g);
-        if (!isFirst)
+        if (!isFirst) {
             visualCurve.draw(context);
+            FragmentDecorator decorator = new FragmentDecorator(visualCurve, 1, 0);
+            new VisualCurve(decorator).draw(context);
+            new VisualCurve(new MoveDecorator(new FragmentDecorator(visualCurve,0,0.2), visualCurve.getPoint(1))).draw(context);
+        }
         isFirst = false;
     }
 

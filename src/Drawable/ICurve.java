@@ -1,5 +1,7 @@
 package Drawable;
 
+import CheckPolicies.ICheck;
+
 /**
  * Created by Vasily Danilin on 29.09.2017.
  */

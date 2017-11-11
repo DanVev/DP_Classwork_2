@@ -1,4 +1,4 @@
-package Drawable;
+package CheckPolicies;
 
 /**
  * Created by Vasily Danilin on 03.11.2017.
