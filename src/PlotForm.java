@@ -53,39 +53,32 @@ public class PlotForm {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                SVGContext svgContext = new SVGContext();
-                svgContext.createSVGContent(line, line.getA(), line.getB());
-                File file = new File("./svg1.svg");
-                try {
-                    FileWriter fileWriter = new FileWriter(file);
-                    fileWriter.write(svgContext.getXML());
-                    fileWriter.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                    System.out.println("problem with file");
-                }
-                System.out.println(svgContext.getXML());
+                saveSVG("./svg1.svg", PlotForm.this.line);
             }
         });
         svgButton2.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                SVGContext svgContext = new SVGContext();
-                svgContext.createSVGContent(line, line.getA(), line.getB());
-                File file = new File("./svg2.svg");
-                try {
-                    FileWriter fileWriter = new FileWriter(file);
-                    fileWriter.write(svgContext.getXML());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-
-                System.out.println(svgContext.getXML());
-
+                saveSVG("./svg2.svg", PlotForm.this.bezier);
             }
 
         });
+    }
+
+    private void saveSVG(String pathname, ACurve curve) {
+        SVGContext svgContext = new SVGContext();
+        svgContext.createSVGContent(curve, curve.getA(), curve.getB());
+        File file = new File(pathname);
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(svgContext.getXML());
+            fileWriter.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            System.out.println("problem with file");
+        }
+        System.out.println(svgContext.getXML());
     }
 
     public static void main(String[] args) {
