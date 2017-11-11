@@ -4,6 +4,7 @@ import Decorators.MoveDecorator;
 import Drawable.*;
 import Drawable.Point;
 import Visual.*;
+import Composite.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -174,6 +175,11 @@ class Canvas extends JPanel {
             FragmentDecorator decorator = new FragmentDecorator(visualCurve, 1, 0);
             new VisualCurve(decorator).draw(context);
             new VisualCurve(new MoveDecorator(new FragmentDecorator(visualCurve,0,0.2), visualCurve.getPoint(1))).draw(context);
+            Line a = new Line(new Point(50,10), new Point(100,10));
+            Line b = new Line(new Point(100,10), new Point(100,100));
+            Line c = new Line(new Point(100,100), new Point(200,100));
+            new VisualCurve(new Chain(a,new Chain(b,c))).drawWithoutAnyPoints(context);
+
         }
         isFirst = false;
     }
