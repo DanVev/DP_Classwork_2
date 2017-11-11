@@ -1,8 +1,7 @@
-package Visual;
+package Contexts;
 
 import Drawable.ICurve;
 import Drawable.IPoint;
-import org.omg.CORBA.INV_POLICY;
 
 import java.util.ArrayList;
 import java.util.List;

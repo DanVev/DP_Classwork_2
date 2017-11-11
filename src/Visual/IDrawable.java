@@ -1,6 +1,6 @@
 package Visual;
 
-import java.awt.*;
+import Contexts.IGContext;
 
 /**
  * Created by Vasily Danilin on 29.09.2017.

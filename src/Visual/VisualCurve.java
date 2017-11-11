@@ -1,5 +1,6 @@
 package Visual;
 
+import Contexts.IGContext;
 import Drawable.*;
 
 /**

@@ -1,7 +1,6 @@
-package Visual;
+package Contexts;
 
 import Drawable.*;
-import Drawable.Point;
 
 import java.awt.*;
 

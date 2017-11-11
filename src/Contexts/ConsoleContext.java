@@ -1,4 +1,4 @@
-package Visual;
+package Contexts;
 
 import Drawable.ICurve;
 import Drawable.IPoint;
