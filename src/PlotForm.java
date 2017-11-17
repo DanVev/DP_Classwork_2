@@ -27,7 +27,7 @@ public class PlotForm {
     private JPanel jPanel2;
     private JButton svgButton1;
     private JButton svgButton2;
-    private Line line = new Line(new Point(10, 10), new Point(300, 350));
+    private Line line = new Line(new Point(20, 350), new Point(400, 30));
     private Bezier bezier = new Bezier(new Point(10, 10), new Point(200, 300), new Point(300, 150), new Point(380, 380));
     private VisualCurve visualLine = new VisualCurve(line);
     private VisualCurve visualBezier = new VisualCurve(bezier);
