@@ -97,7 +97,6 @@ public class PlotForm {
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
         jPanel1 = new JPanel();
         jPanel2 = new JPanel();
 
@@ -172,7 +171,7 @@ class Canvas extends JPanel {
         IGContext context = isDotted ? new Graphics2DDottedContext(g) : new Graphics2DContext(g);
         super.paintComponents(g);
         if (!isFirst) {
-            new ShellDecorator(visualCurve).draw(context);
+            new ShellDecorator(visualCurve, 5).draw(context);
             //FragmentDecorator decorator = new FragmentDecorator(visualCurve, 1, 0);
             //new VisualCurve(decorator).draw(context);
             new VisualCurve(new MoveDecorator(new FragmentDecorator(visualCurve,0,0.2), visualCurve.getPoint(1))).draw(context);
