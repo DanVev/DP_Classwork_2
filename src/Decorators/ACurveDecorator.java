@@ -1,6 +1,5 @@
 package Decorators;
 
-import CheckPolicies.ICheck;
 import Drawable.ICurve;
 import Drawable.IPoint;
 
