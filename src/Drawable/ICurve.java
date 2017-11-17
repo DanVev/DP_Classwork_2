@@ -7,5 +7,4 @@ import CheckPolicies.ICheck;
  */
 public interface ICurve {
     IPoint getPoint(double t);
-    double getLength(double t, ICheck checker);
 }

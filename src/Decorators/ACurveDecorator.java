@@ -18,9 +18,4 @@ public abstract class ACurveDecorator implements ICurve {
     public IPoint getPoint(double t) {
         return component.getPoint(t);
     }
-
-    @Override
-    public double getLength(double t, ICheck checker) {
-        return component.getLength(t, checker);
-    }
 }

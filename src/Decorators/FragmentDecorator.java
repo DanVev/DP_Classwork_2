@@ -1,6 +1,5 @@
 package Decorators;
 
-import CheckPolicies.ICheck;
 import Drawable.ICurve;
 import Drawable.IPoint;
 
@@ -16,17 +15,12 @@ public class FragmentDecorator extends ACurveDecorator {
         super(component);
         this.start = start;
         this.finish = finish;
-        this.interval = finish-start;
+        this.interval = finish - start;
     }
 
     @Override
     public IPoint getPoint(double t) {
         return super.getPoint(t * interval + start);
     }
-
-    @Override
-    public double getLength(double t, ICheck checker) {
-        //System.out.println("Warning! getLength function isn't overridden for fragmentDecorator");
-        return super.getLength(t, checker);
-    }
 }
+

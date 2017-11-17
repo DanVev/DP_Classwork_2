@@ -3,6 +3,7 @@ package Visual;
 import CheckPolicies.CheckByAll;
 import CheckPolicies.CheckByLength;
 import CheckPolicies.ICheck;
+import CheckPolicies.LengthCalculator;
 import Contexts.IGContext;
 import Drawable.*;
 
@@ -28,8 +29,9 @@ public class VisualCurve implements ICurve, IDrawable {
     @Override
     public void draw(IGContext context) {
         context.drawLine(curve, a, b);
-        double l = curve.getLength(1, new CheckByAll());
-        double central_t = curve.getLength(l / 2, new CheckByLength());
+        LengthCalculator calculator = new LengthCalculator();
+        double l = calculator.getLength(curve, 1, new CheckByAll());
+        double central_t = calculator.getLength(curve, l / 2, new CheckByLength());
         System.out.println(central_t);
         context.drawCircle(curve.getPoint(central_t), 5);
         context.drawStartPoint(a);
@@ -41,8 +43,4 @@ public class VisualCurve implements ICurve, IDrawable {
         context.drawLine(curve, a, b);
     }
 
-    @Override
-    public double getLength(double t, ICheck checker) {
-        return curve.getLength(t, checker);
-    }
 }
