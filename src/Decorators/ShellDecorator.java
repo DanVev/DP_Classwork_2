@@ -43,8 +43,8 @@ public class ShellDecorator implements IVisualCurve {
                 double shellPoint1X = margin / Math.sqrt(1 + delta * delta);
                 IPoint shellPoint1 = new Point(x + shellPoint1X, y + shellPoint1X * (-delta));
                 IPoint shellPoint2 = new Point(x - shellPoint1X, y + shellPoint1X * delta);
-                context.drawLine(new Line(shellPoint1_old, shellPoint1), shellPoint1_old, shellPoint1);
-                context.drawLine(new Line(shellPoint2_old, shellPoint2), shellPoint1_old, shellPoint1);
+                context.drawLine(new Line(shellPoint1_old, shellPoint1));
+                context.drawLine(new Line(shellPoint2_old, shellPoint2));
                 shellPoint1_old = shellPoint1;
                 shellPoint2_old = shellPoint2;
                 if (i == 1)

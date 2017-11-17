@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Vasily Danilin on 10.11.2017.
  */
 public class SVGContext implements IGContext {
-    List<String> content = new ArrayList<>();
+    private List<String> content = new ArrayList<>();
 
     public String getXML() {
         final String[] inner = {""};
@@ -26,7 +26,7 @@ public class SVGContext implements IGContext {
     }
 
     @Override
-    public void drawLine(ICurve c, IPoint a, IPoint b) {
+    public void drawLine(ICurve c) {
         int old_x = 0;
         int old_y = 0;
         for (double i = 0; i <= 1; i += 0.05) {
@@ -58,9 +58,9 @@ public class SVGContext implements IGContext {
         drawCircle(a, 2);
     }
 
-    public void createSVGContent(ICurve c, IPoint a, IPoint b) {
-        drawLine(c, a, b);
-        drawStartPoint(a);
-        drawEndPoint(b);
+    public void createSVGContent(ICurve c) {
+        drawLine(c);
+        drawStartPoint(c.getPoint(0));
+        drawEndPoint(c.getPoint(1));
     }
 }

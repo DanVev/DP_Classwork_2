@@ -20,7 +20,7 @@ public class Graphics2DDottedContext extends Graphics2DContext implements IGCont
     }
 
     @Override
-    public void drawLine(ICurve c, IPoint a, IPoint b) {
+    public void drawLine(ICurve c) {
         initGraphicsParams();
         int old_x = 0;
         int old_y = 0;

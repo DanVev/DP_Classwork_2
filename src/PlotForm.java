@@ -73,7 +73,7 @@ public class PlotForm {
 
     private void saveSVG(String pathname, ACurve curve) {
         SVGContext svgContext = new SVGContext();
-        svgContext.createSVGContent(curve, curve.getA(), curve.getB());
+        svgContext.createSVGContent(curve);
         File file = new File(pathname);
         try {
             FileWriter fileWriter = new FileWriter(file);

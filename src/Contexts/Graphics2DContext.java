@@ -8,7 +8,7 @@ import java.awt.*;
  * Created by Vasily Danilin on 20.10.2017.
  */
 public class Graphics2DContext implements IGContext {
-    protected Graphics2D g2d;
+    Graphics2D g2d;
 
     public Graphics2DContext(Graphics g2d) {
         this.g2d = (Graphics2D)g2d;
@@ -18,7 +18,7 @@ public class Graphics2DContext implements IGContext {
     }
 
     @Override
-    public void drawLine(ICurve c, IPoint a, IPoint b) {
+    public void drawLine(ICurve c) {
         initGraphicsParams();
         int old_x = 0;
         int old_y = 0;

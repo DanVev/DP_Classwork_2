@@ -28,7 +28,7 @@ public class VisualCurve implements IVisualCurve {
 
     @Override
     public void draw(IGContext context) {
-        context.drawLine(curve, a, b);
+        context.drawLine(curve);
         LengthCalculator calculator = new LengthCalculator();
         double l = calculator.getLength(curve, 1, new CheckByAll());
         double central_t = calculator.getLength(curve, l / 2, new CheckByLength());
@@ -40,7 +40,7 @@ public class VisualCurve implements IVisualCurve {
 
     @Override
     public void drawWithoutAnyPoints(IGContext context) {
-        context.drawLine(curve, a, b);
+        context.drawLine(curve);
     }
 
 }

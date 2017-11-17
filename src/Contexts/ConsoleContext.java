@@ -8,7 +8,7 @@ import Drawable.IPoint;
  */
 public class ConsoleContext implements IGContext{
     @Override
-    public void drawLine(ICurve c, IPoint a, IPoint b) {
+    public void drawLine(ICurve c) {
         System.out.println("Drawing line:"+c.toString());
     }
 
