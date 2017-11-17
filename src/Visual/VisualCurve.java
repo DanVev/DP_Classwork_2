@@ -10,8 +10,8 @@ import Drawable.*;
 /**
  * Created by Vasily Danilin on 29.09.2017.
  */
-public class VisualCurve implements ICurve, IDrawable {
-    protected ICurve curve;
+public class VisualCurve implements IVisualCurve {
+    private ICurve curve;
     private IPoint a;
     private IPoint b;
 

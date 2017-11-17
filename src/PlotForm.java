@@ -1,6 +1,7 @@
 import Contexts.*;
 import Decorators.FragmentDecorator;
 import Decorators.MoveDecorator;
+import Decorators.ShellDecorator;
 import Drawable.*;
 import Drawable.Point;
 import Visual.*;
@@ -34,7 +35,7 @@ public class PlotForm {
     private Canvas canvas2 = new Canvas(visualBezier);
 
 
-    public PlotForm() {
+    private PlotForm() {
         $$$setupUI$$$();
         button1.addMouseListener(new MouseAdapter() {
             @Override
@@ -158,9 +159,9 @@ public class PlotForm {
 class Canvas extends JPanel {
     private VisualCurve visualCurve;
     boolean isDotted = true;
-    boolean isFirst = true;
+    private boolean isFirst = true;
 
-    public Canvas(VisualCurve visualCurve) {
+    Canvas(VisualCurve visualCurve) {
         super();
         setPreferredSize(new Dimension(500, 500));
         this.visualCurve = visualCurve;
@@ -171,9 +172,9 @@ class Canvas extends JPanel {
         IGContext context = isDotted ? new Graphics2DDottedContext(g) : new Graphics2DContext(g);
         super.paintComponents(g);
         if (!isFirst) {
-            visualCurve.draw(context);
-            FragmentDecorator decorator = new FragmentDecorator(visualCurve, 1, 0);
-            new VisualCurve(decorator).draw(context);
+            new ShellDecorator(visualCurve).draw(context);
+            //FragmentDecorator decorator = new FragmentDecorator(visualCurve, 1, 0);
+            //new VisualCurve(decorator).draw(context);
             new VisualCurve(new MoveDecorator(new FragmentDecorator(visualCurve,0,0.2), visualCurve.getPoint(1))).draw(context);
             Line a = new Line(new Point(50,10), new Point(100,20));
             Line b = new Line(new Point(100,20), new Point(100,100));
