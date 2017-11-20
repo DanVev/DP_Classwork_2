@@ -14,9 +14,6 @@ public class Graphics2DContext implements IGContext {
         this.g2d = (Graphics2D)g2d;
     }
 
-    public Graphics2DContext() {
-    }
-
     @Override
     public void drawLine(ICurve c) {
         initGraphicsParams();
@@ -34,7 +31,7 @@ public class Graphics2DContext implements IGContext {
     }
 
     protected void initGraphicsParams() {
-        g2d.setPaint(Color.GREEN);
+        g2d.setPaint(new Color(60,60,214));
         g2d.setStroke(new BasicStroke(2));
     }
 
@@ -43,12 +40,9 @@ public class Graphics2DContext implements IGContext {
         g2d.drawOval((int)a.getX()-radius,(int)a.getY()-radius,2*radius,2*radius);
     }
 
-    public void setG2d(Graphics2D g2d) {
-        this.g2d = g2d;
-    }
-
     @Override
     public void drawStartPoint(IPoint a) {
+        //TODO: make arrows
         initGraphicsParams();
         drawCircle(a, 2*3);
     }
