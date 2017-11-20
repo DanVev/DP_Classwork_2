@@ -1,6 +1,7 @@
 package Contexts;
 
 import Drawable.*;
+import Drawable.Point;
 
 import java.awt.*;
 
@@ -11,7 +12,7 @@ public class Graphics2DContext implements IGContext {
     Graphics2D g2d;
 
     public Graphics2DContext(Graphics g2d) {
-        this.g2d = (Graphics2D)g2d;
+        this.g2d = (Graphics2D) g2d;
     }
 
     @Override
@@ -31,27 +32,32 @@ public class Graphics2DContext implements IGContext {
     }
 
     protected void initGraphicsParams() {
-        g2d.setPaint(new Color(60,60,214));
+        g2d.setPaint(new Color(60, 60, 214));
         g2d.setStroke(new BasicStroke(2));
     }
 
     @Override
     public void drawCircle(IPoint a, int radius) {
-        g2d.drawOval((int)a.getX()-radius,(int)a.getY()-radius,2*radius,2*radius);
+        g2d.drawOval((int) a.getX() - radius, (int) a.getY() - radius, 2 * radius, 2 * radius);
     }
 
     @Override
     public void drawStartPoint(IPoint a) {
-        //TODO: make arrows
         initGraphicsParams();
-        drawCircle(a, 2*3);
+        drawCircle(a, 2 * 3);
     }
 
     @Override
-    public void drawEndPoint(IPoint a) {
+    public void drawEndPoint(IPoint a, ICurve c) {
         initGraphicsParams();
-        g2d.drawLine((int)a.getX()-6,(int)a.getY(),(int)a.getX(),(int)a.getY());
-        g2d.drawLine((int)a.getX(),(int)a.getY()-6,(int)a.getX(),(int)a.getY());
+        IPoint point = c.getPoint(0.98);
+        double delta = (a.getX() - point.getX()) / (a.getY() - point.getY());
+        double arrowPoint_x = (8 / 2) / Math.sqrt(1 + delta * delta);
+        IPoint arrowPoint1 = new Point(a.getX() + arrowPoint_x, a.getY() + arrowPoint_x * (-delta));
+        IPoint arrowPoint2 = new Point(a.getX() - arrowPoint_x, a.getY() + arrowPoint_x * delta);
+        g2d.drawPolygon(new int[]{(int) (2*a.getX()-point.getX()),(int) arrowPoint1.getX(), (int) arrowPoint2.getX()}, new int[]{(int) (2*a.getY()-point.getY()),(int) arrowPoint1.getY(), (int) arrowPoint2.getY()},3);
+
+
     }
 
 

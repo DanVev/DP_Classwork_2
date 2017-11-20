@@ -53,14 +53,15 @@ public class SVGContext implements IGContext {
         drawCircle(a, 2);
     }
 
+
     @Override
-    public void drawEndPoint(IPoint a) {
+    public void drawEndPoint(IPoint a, ICurve c) {
         drawCircle(a, 2);
     }
 
     public void createSVGContent(ICurve c) {
         drawLine(c);
         drawStartPoint(c.getPoint(0));
-        drawEndPoint(c.getPoint(1));
+        drawEndPoint(c.getPoint(1), c);
     }
 }

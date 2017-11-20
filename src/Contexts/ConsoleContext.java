@@ -23,7 +23,7 @@ public class ConsoleContext implements IGContext{
     }
 
     @Override
-    public void drawEndPoint(IPoint a) {
+    public void drawEndPoint(IPoint a, ICurve c) {
 
     }
 }

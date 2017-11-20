@@ -49,7 +49,7 @@ public class Graphics2DDottedContext extends Graphics2DContext implements IGCont
     }
 
     @Override
-    public void drawEndPoint(IPoint a) {
+    public void drawEndPoint(IPoint a, ICurve c) {
         initGraphicsParams();
         g2d.drawRect((int) a.getX() - 3, (int) a.getY() - 3, 6, 6);
     }

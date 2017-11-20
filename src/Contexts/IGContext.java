@@ -13,5 +13,5 @@ public interface IGContext{
     void drawLine(ICurve c);
     void drawCircle(IPoint a, int radius);
     void drawStartPoint(IPoint a);
-    void drawEndPoint(IPoint a);
+    void drawEndPoint(IPoint a, ICurve c);
 }

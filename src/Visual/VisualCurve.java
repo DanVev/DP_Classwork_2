@@ -34,7 +34,7 @@ public class VisualCurve implements IVisualCurve {
         double central_t = calculator.getLength(curve, l / 2, new CheckByLength());
         context.drawCircle(curve.getPoint(central_t), 5);
         context.drawStartPoint(a);
-        context.drawEndPoint(b);
+        context.drawEndPoint(b, curve);
     }
 
     @Override
