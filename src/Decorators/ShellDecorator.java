@@ -34,7 +34,7 @@ public class ShellDecorator implements IVisualCurve {
         final float step = 0.01F;
         for (float i = 0; i <= 1; i += step) {
             if ((i + step > 1) && (i != 1))
-                i =1-step;
+                i = 1 - step;
             IPoint point = component.getPoint(i);
             double x = point.getX();
             double y = point.getY();
@@ -44,18 +44,18 @@ public class ShellDecorator implements IVisualCurve {
                 IPoint shellPoint1 = new Point(x + shellPoint1X, y + shellPoint1X * (-delta));
                 IPoint shellPoint2 = new Point(x - shellPoint1X, y + shellPoint1X * delta);
                 context.drawLine(new Line(shellPoint1_old, shellPoint1));
-                //context.drawLine(new Line(shellPoint2_old, shellPoint2));
+                context.drawLine(new Line(shellPoint2_old, shellPoint2));
                 shellPoint1_old = shellPoint1;
                 shellPoint2_old = shellPoint2;
                 if (i == 1)
-                    drawEnds(context,point,shellPoint1_old,shellPoint2_old);
+                    drawEnds(context, point, shellPoint2_old);
             } else {
                 IPoint a = component.getPoint(step);
                 double delta = (a.getX() - x) / (a.getY() - y);
                 double shellPoint1X = margin / Math.sqrt(1 + delta * delta);
                 shellPoint1_old = new Point(x + shellPoint1X, y + shellPoint1X * (-delta));
                 shellPoint2_old = new Point(x - shellPoint1X, y + shellPoint1X * delta);
-                drawEnds(context, point,shellPoint1_old,shellPoint2_old);
+                drawEnds(context, point, shellPoint1_old);
             }
             old_x = x;
             old_y = y;
@@ -63,18 +63,17 @@ public class ShellDecorator implements IVisualCurve {
         }
     }
 
-    private void drawEnds(IGContext context, IPoint center, IPoint shellPoint1, IPoint shellPoint2) {
-        //TODO: rewrite a method
+    private void drawEnds(IGContext context, IPoint center, IPoint shellPoint1) {
         double x_r_old = 0;
         double y_r_old = 0;
-        final double step = 0.0001;
-        double startAngle = Math.atan((shellPoint1.getY()-center.getY())/(shellPoint1.getX()-center.getX()));
-        double finishAngle = Math.atan((shellPoint2.getY()-center.getY())/(shellPoint2.getX()-center.getX()));
-        for (double angle = startAngle; angle <= finishAngle; angle += step) {
-            double x_r = margin*Math.cos(angle);
-            double y_r = margin*Math.sin(angle);
-            if (angle!=startAngle)
-                context.drawLine(new Line(new Point(center.getX()+x_r_old, center.getY()+y_r_old), new Point(center.getX()+x_r, center.getY()+y_r)));
+        final double step = 0.1;
+        double tan = (shellPoint1.getY() - center.getY()) / (shellPoint1.getX() - center.getX());
+        double startAngle = Math.atan(tan) + (((margin) * (shellPoint1.getY()-center.getY())) > 0 ? 0 : Math.PI);
+        for (double angle = startAngle; angle <= startAngle+Math.PI; angle += step) {
+            double x_r = margin * Math.cos(angle);
+            double y_r = margin * Math.sin(angle);
+            if (angle != startAngle)
+                context.drawLine(new Line(new Point(center.getX() + x_r_old, center.getY() + y_r_old), new Point(center.getX() + x_r, center.getY() + y_r)));
             x_r_old = x_r;
             y_r_old = y_r;
         }

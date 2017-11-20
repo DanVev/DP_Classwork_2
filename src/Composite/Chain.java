@@ -1,8 +1,5 @@
 package Composite;
 
-import CheckPolicies.CheckByAll;
-import CheckPolicies.CheckByLength;
-import CheckPolicies.ICheck;
 import Drawable.ICurve;
 import Drawable.IPoint;
 
