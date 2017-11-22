@@ -55,7 +55,7 @@ public class Graphics2DContext implements IGContext {
         double arrowPoint_x = (8 / 2) / Math.sqrt(1 + delta * delta);
         IPoint arrowPoint1 = new Point(a.getX() + arrowPoint_x, a.getY() + arrowPoint_x * (-delta));
         IPoint arrowPoint2 = new Point(a.getX() - arrowPoint_x, a.getY() + arrowPoint_x * delta);
-        g2d.drawPolygon(new int[]{(int) (2*a.getX()-point.getX()),(int) arrowPoint1.getX(), (int) arrowPoint2.getX()}, new int[]{(int) (2*a.getY()-point.getY()),(int) arrowPoint1.getY(), (int) arrowPoint2.getY()},3);
+        g2d.fillPolygon(new int[]{(int) (2*a.getX()-point.getX()),(int) arrowPoint1.getX(), (int) arrowPoint2.getX()}, new int[]{(int) (2*a.getY()-point.getY()),(int) arrowPoint1.getY(), (int) arrowPoint2.getY()},3);
 
 
     }
