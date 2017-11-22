@@ -31,6 +31,6 @@ public abstract class ACurve implements ICurve {
     }
 
     public double getLength(double t, ICheck checker) {
-        return new LengthCalculator().getLength(this, t, checker);
+        return LengthCalculator.getLength(this, t, checker);
     }
 }

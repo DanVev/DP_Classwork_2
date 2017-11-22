@@ -4,8 +4,6 @@ package Contexts;
 import Drawable.ICurve;
 import Drawable.IPoint;
 
-import java.awt.*;
-
 /**
  * Created by Vasily Danilin on 29.09.2017.
  */

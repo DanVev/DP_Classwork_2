@@ -1,11 +1,8 @@
 import Contexts.*;
-import Decorators.FragmentDecorator;
-import Decorators.MoveDecorator;
 import Decorators.ShellDecorator;
 import Drawable.*;
 import Drawable.Point;
 import Visual.*;
-import Composite.*;
 
 import javax.swing.*;
 import java.awt.*;

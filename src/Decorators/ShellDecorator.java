@@ -68,8 +68,8 @@ public class ShellDecorator implements IVisualCurve {
         double y_r_old = 0;
         final double step = 0.1;
         double tan = (shellPoint1.getY() - center.getY()) / (shellPoint1.getX() - center.getX());
-        double startAngle = Math.atan(tan) + (((margin) * (shellPoint1.getY()-center.getY())) > 0 ? 0 : Math.PI);
-        for (double angle = startAngle; angle <= startAngle+Math.PI; angle += step) {
+        double startAngle = Math.atan(tan) + (((margin) * (shellPoint1.getY() - center.getY())) > 0 ? 0 : Math.PI);
+        for (double angle = startAngle; angle <= startAngle + Math.PI; angle += step) {
             double x_r = margin * Math.cos(angle);
             double y_r = margin * Math.sin(angle);
             if (angle != startAngle)

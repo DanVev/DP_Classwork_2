@@ -7,7 +7,7 @@ import Drawable.IPoint;
  * Created by Vasily Danilin on 17.11.2017.
  */
 public class LengthCalculator {
-    public double getLength(ICurve c, double t, ICheck checker) {
+    public static double getLength(ICurve c, double t, ICheck checker) {
         double length = 0.0;
         IPoint a = c.getPoint(0);
         double old_x = a.getX();
