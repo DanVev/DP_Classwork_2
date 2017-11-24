@@ -31,7 +31,7 @@ public class ShellDecorator implements IVisualCurve {
         IPoint shellPoint2_old = null;
 
         //shell painting
-        final float step = 0.01F;
+        final float step = 0.005F;
         for (float i = 0; i <= 1; i += step) {
             if ((i + step > 1) && (i != 1))
                 i = 1 - step;
