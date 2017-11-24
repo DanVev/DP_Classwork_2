@@ -1,11 +1,14 @@
-import Contexts.*;
-import Decorators.FragmentDecorator;
-import Decorators.MoveDecorator;
+import Contexts.Graphics2DContext;
+import Contexts.Graphics2DDottedContext;
+import Contexts.IGContext;
+import Contexts.SVGContext;
 import Decorators.ShellDecorator;
-import Drawable.*;
+import Drawable.ACurve;
+import Drawable.Bezier;
+import Drawable.Line;
 import Drawable.Point;
-import Visual.*;
-import Composite.*;
+import Visual.VisualCurve;
+import Composite.Chain;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +31,8 @@ public class PlotForm {
     private JButton svgButton1;
     private JButton svgButton2;
     private Line line = new Line(new Point(20, 350), new Point(400, 30));
-    private Bezier bezier = new Bezier(new Point(10, 10), new Point(200, 300), new Point(300, 150), new Point(380, 380));
+    private Bezier bezier = new Bezier(new Point(10, 10), new Point(200, 300),
+            new Point(300, 150), new Point(380, 380));
     private VisualCurve visualLine = new VisualCurve(line);
     private VisualCurve visualBezier = new VisualCurve(bezier);
     private Canvas canvas1 = new Canvas(visualLine);
@@ -174,11 +178,12 @@ class Canvas extends JPanel {
             new ShellDecorator(visualCurve, 8).draw(context);
             //FragmentDecorator decorator = new FragmentDecorator(visualCurve, 1, 0);
             //new VisualCurve(decorator).draw(context);
-//            new VisualCurve(new MoveDecorator(new FragmentDecorator(visualCurve,0,0.2), visualCurve.getPoint(1))).draw(context);
-//            Line a = new Line(new Point(50,10), new Point(100,20));
-//            Line b = new Line(new Point(100,20), new Point(100,100));
-//            Line c = new Line(new Point(100,100), new Point(200,100));
-//            new VisualCurve(new Chain(a,new Chain(b,c))).drawWithoutAnyPoints(context);
+//            new VisualCurve(new MoveDecorator(new FragmentDecorator(visualCurve,0,0.2),
+// visualCurve.getPoint(1))).draw(context);
+            Line a = new Line(new Point(150, 10), new Point(250, 20));
+            Line b = new Line(new Point(250, 20), new Point(250, 100));
+            Line c = new Line(new Point(250, 100), new Point(300, 150));
+            new ShellDecorator(new VisualCurve(new Chain(a, new Chain(b, c))), 8).draw(context);
 
         }
         isFirst = false;

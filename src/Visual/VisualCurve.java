@@ -2,7 +2,6 @@ package Visual;
 
 import CheckPolicies.CheckByAll;
 import CheckPolicies.CheckByLength;
-import CheckPolicies.ICheck;
 import CheckPolicies.LengthCalculator;
 import Contexts.IGContext;
 import Drawable.*;
