@@ -11,13 +11,9 @@ import Drawable.*;
  */
 public class VisualCurve implements IVisualCurve {
     private ICurve curve;
-    private IPoint a;
-    private IPoint b;
 
     public VisualCurve(ICurve curve) {
         this.curve = curve;
-        a = curve.getPoint(0);
-        b = curve.getPoint(1);
     }
 
     @Override
@@ -31,8 +27,8 @@ public class VisualCurve implements IVisualCurve {
         double l = LengthCalculator.getLength(curve, 1, new CheckByAll());
         double central_t = LengthCalculator.getLength(curve, l / 2, new CheckByLength());
         context.drawCircle(curve.getPoint(central_t), 5);
-        context.drawStartPoint(a);
-        context.drawEndPoint(b, curve);
+        context.drawStartPoint(curve.getPoint(0));
+        context.drawEndPoint(curve.getPoint(1), curve);
     }
 
     @Override

@@ -2,9 +2,11 @@ import Contexts.Graphics2DContext;
 import Contexts.Graphics2DDottedContext;
 import Contexts.IGContext;
 import Contexts.SVGContext;
+import Decorators.ActivePointDecorator;
 import Decorators.ShellDecorator;
 import Drawable.*;
 import Drawable.Point;
+import Visual.IActiveComponent;
 import Visual.IVisualCurve;
 import Visual.VisualCurve;
 import Composite.Chain;
@@ -16,6 +18,8 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by Vasily Danilin on 03.11.2017.
@@ -28,7 +32,6 @@ public class PlotForm {
     private JButton svgButton1;
     private Canvas canvas1 = new Canvas(false);
     private Canvas canvas2 = new Canvas(true);
-
 
     private PlotForm() {
         $$$setupUI$$$();
@@ -78,9 +81,64 @@ public class PlotForm {
     private void createUIComponents() {
         jPanel1 = new JPanel();
         jPanel2 = new JPanel();
-
         jPanel1.add(canvas1);
         jPanel2.add(canvas2);
+
+        canvas1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                canvas1.nearest = findNearest(e, canvas1);
+                canvas1.oldPoint = new Point(e.getX(), e.getY());
+            }
+        });
+
+        canvas2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                canvas2.nearest = findNearest(e, canvas2);
+                canvas2.oldPoint = new Point(e.getX(), e.getY());
+            }
+        });
+        canvas1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                moveNearest(e, canvas1);
+
+            }
+        });
+        canvas2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                moveNearest(e, canvas2);
+
+            }
+        });
+    }
+
+    private void moveNearest(MouseEvent e, Canvas panel) {
+        IPoint point = panel.nearest;
+        point.setX(point.getX() + (e.getX() - panel.oldPoint.getX()));
+        point.setY(point.getY() + (e.getY() - panel.oldPoint.getY()));
+        panel.repaint();
+    }
+
+    private IPoint findNearest(MouseEvent e, Canvas panel) {
+        boolean isFirst = true;
+        double minLength = 0.0;
+        IPoint nearest = null;
+        for (IPoint point : panel.getActiveComponentList()) {
+            double length = (e.getX() - point.getX()) * (e.getX() - point.getX()) + (e.getY() - point.getY()) * (e.getY() - point.getY());
+            if ((length < minLength) || (isFirst)) {
+                minLength = length;
+                nearest = point;
+            }
+            isFirst = false;
+        }
+        return nearest;
     }
 
     /**
@@ -125,29 +183,48 @@ class Canvas extends JPanel {
     private boolean isDotted;
     private boolean isFirst = true;
     ICurve main;
+    private List<IPoint> activeComponentList = new ArrayList<>();
+    IPoint nearest;
+    IPoint oldPoint;
+    IPoint aPoint = new ActivePointDecorator(new Point(15, 10));
+    IPoint bPoint = new ActivePointDecorator(new Point(300, 70));
+    IPoint cPoint = new ActivePointDecorator(new Point(250, 300));
+    IPoint dPoint = new ActivePointDecorator(new Point(450, 400));
+    Line a = new Line(aPoint, bPoint);
+    Line b = new Line(bPoint, cPoint);
+    Line c = new Line(cPoint, dPoint);
+    IVisualCurve curve = new ShellDecorator(new VisualCurve(new Chain(a, new Chain(b, c))), 8);
 
     Canvas(boolean isDotted) {
         super();
         this.isDotted = isDotted;
         setPreferredSize(new Dimension(500, 500));
+        activeComponentList.add(aPoint);
+        activeComponentList.add(bPoint);
+        activeComponentList.add(cPoint);
+        activeComponentList.add(dPoint);
+
+        System.out.println("do");
+
+        this.main = curve;
+
+    }
+
+    public List<IPoint> getActiveComponentList() {
+        return activeComponentList;
     }
 
     public void paintComponent(Graphics g) {
         System.out.println("repaint...");
-
         super.paintComponents(g);
+        g.clearRect(0, 0, 500, 500);
         IGContext context;
         if (!isFirst) {
-            Line a = new Line(new Point(150, 10), new Point(300, 70));
-            Line b = new Line(new Point(300, 70), new Point(250, 300));
-            Line c = new Line(new Point(250, 300), new Point(450, 400));
-            System.out.println("do");
-            IVisualCurve curve = new ShellDecorator(new VisualCurve(new Chain(a, new Chain(b, c))), 8);
-            this.main = curve;
             context = isDotted ? new Graphics2DDottedContext(g) : new Graphics2DContext(g);
             curve.draw(context);
         }
         isFirst = false;
+
     }
 
 }
