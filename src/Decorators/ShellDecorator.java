@@ -4,6 +4,7 @@ import Contexts.IGContext;
 import Drawable.IPoint;
 import Drawable.Line;
 import Drawable.Point;
+import Drawable.PointCalculator;
 import Visual.IVisualCurve;
 
 /**
@@ -41,33 +42,43 @@ public class ShellDecorator implements IVisualCurve {
             double x = point.getX();
             double y = point.getY();
             if (i != 0) {
-                double delta = (x - old_x) / (y - old_y);
+                double delta = ((x - old_x) / (y - old_y));
                 double shellPoint1X = margin / Math.sqrt(1 + delta * delta);
-                IPoint shellPoint1 = new Point(x + shellPoint1X, y + shellPoint1X * (-delta));
-                IPoint shellPoint2 = new Point(x - shellPoint1X, y + shellPoint1X * delta);
-
+                Point shiftPoint = new Point(((y - old_y) > 0 ? 1 : -1) * shellPoint1X,
+                        (((y - old_y) > 0 ? 1 : -1) * shellPoint1X * (-delta)));
+                IPoint shellPoint1 = PointCalculator.add(point, shiftPoint);
+                IPoint shellPoint2 = PointCalculator.subtract(point, shiftPoint);
                 IPoint shellVector1_old = new Point(shellPoint1_old.getX() - old_x, shellPoint1_old.getY() - old_y);
                 IPoint shellVector2_old = new Point(shellPoint2_old.getX() - old_x, shellPoint2_old.getY() - old_y);
+                if ((i > 0.1F) && (i < 0.1F + 2 * step)) {
+                    System.out.println("________________________");
+                    System.out.println("x coord = " + shellPoint1X);
+                    System.out.println("delta = " + (1 / delta));
+                }
+                IPoint shellVector1 = PointCalculator.subtract(shellPoint1, point);
+                IPoint shellVector2 = PointCalculator.subtract(shellPoint2, point);
 
-                IPoint shellVector1 = new Point(shellPoint1.getX() - x, shellPoint1.getY() - y);
-                IPoint shellVector2 = new Point(shellPoint2.getX() - x, shellPoint2.getY() - y);
+                //context.drawCircle(shellPoint1, 2);
+                // System.out.println("length for sp1 = "+PointCalculator.getDistance(shellPoint1, point));
 
-
-                if (!hasIntersection(i, shellPoint1, 0.05F, step)) {
-                    double angle = getAngle(shellVector1_old, shellVector1);
-                    if (angle <= angleThreshold)
+                if (!hasIntersection(i, shellPoint1, 0.5F, step)) {
+                    double angle = getCosAngle(shellVector1_old, shellVector1);
+                    if (angle <= angleThreshold) {
                         context.drawLine(new Line(shellPoint1_old, shellPoint1));
-                    else {
+                        //context.drawCircle(shellPoint1,2);
+                    } else {
                         IPoint middlePoint = getMiddlePoint(shellPoint1_old, step, i, shellPoint1);
                         context.drawLine(new Line(shellPoint1_old, middlePoint));
                         context.drawLine(new Line(middlePoint, shellPoint1));
+                        //context.drawCircle(shellPoint1,2);
                     }
                     shellPoint1_old = shellPoint1;
+                    //context.drawCircle(shellPoint1, 2);
                 }
-                if (!hasIntersection(i, shellPoint2, 0.05F, step)) {
-                    if (getAngle(shellVector2_old, shellVector2) <= angleThreshold)
+                if (!hasIntersection(i, shellPoint2, 0.5F, step)) {
+                    if (getCosAngle(shellVector2_old, shellVector2) <= angleThreshold) {
                         context.drawLine(new Line(shellPoint2_old, shellPoint2));
-                    else {
+                    } else {
                         IPoint middlePoint = getMiddlePoint(shellPoint2_old, step, i, shellPoint2);
                         context.drawLine(new Line(shellPoint2_old, middlePoint));
                         context.drawLine(new Line(middlePoint, shellPoint2));
@@ -75,14 +86,20 @@ public class ShellDecorator implements IVisualCurve {
                     shellPoint2_old = shellPoint2;
                 }
                 if (i == 1)
-                    drawEnds(context, point, shellPoint2_old);
+                    drawEnds(context, point, shellPoint2_old, shellPoint1_old);
             } else {
                 IPoint a = component.getPoint(step);
-                double delta = (a.getX() - x) / (a.getY() - y);
+                double delta = ((a.getX() - x) / (a.getY() - y));
                 double shellPoint1X = margin / Math.sqrt(1 + delta * delta);
-                shellPoint1_old = new Point(x + shellPoint1X, y + shellPoint1X * (-delta));
-                shellPoint2_old = new Point(x - shellPoint1X, y + shellPoint1X * delta);
-                drawEnds(context, point, shellPoint1_old);
+                Point shiftPoint = new Point(((y - old_y) > 0 ? 1 : -1) * shellPoint1X,
+                        (delta > 0 ? -1 : 1) * (((y - old_y) > 0 ? 1 : -1) * shellPoint1X));
+                shellPoint1_old = PointCalculator.subtract(point, shiftPoint);
+                shellPoint2_old = PointCalculator.add(point, shiftPoint);
+                IPoint shellVector1_old = PointCalculator.subtract(shellPoint1_old, point);
+                IPoint directVector = new Point(x - a.getX(), y - a.getY());
+                double sin = shellVector1_old.getX() * directVector.getY() - shellVector1_old.getY() * directVector.getX();
+                System.out.println("sin in t0 = " + (sin));
+                drawEnds(context, point, shellPoint1_old, shellPoint2_old);
             }
             old_x = x;
             old_y = y;
@@ -100,22 +117,22 @@ public class ShellDecorator implements IVisualCurve {
     private boolean hasIntersection(float t, IPoint shellPoint, float environment, float precision) {
         for (float i = Math.max(0, t - environment); i <= Math.min(1, t + environment); i += precision) {
             IPoint point = component.getPoint(i);
-            if ((point.getX() - shellPoint.getX()) * (point.getX() - shellPoint.getX()) +
-                    (point.getY() - shellPoint.getY()) * ((point.getY() - shellPoint.getY())) < (margin - 0.1) * (margin - 0.1))
+            if (PointCalculator.getDistance(point, shellPoint) < (margin - 0.1))
                 return true;
         }
         return false;
     }
 
 
-    private double getAngle(IPoint vector1, IPoint vector2) {
-        double scalar = vector1.getX() * vector2.getX() + vector1.getY() * vector2.getY();
-        double length1 = Math.sqrt(vector1.getX() * vector1.getX() + vector1.getY() * vector1.getY());
-        double length2 = Math.sqrt(vector2.getX() * vector2.getX() + vector2.getY() * vector2.getY());
+    private double getCosAngle(IPoint vector1, IPoint vector2) {
+        double scalar = PointCalculator.scalarProduct(vector1, vector2);
+        double length1 = PointCalculator.getLength(vector1);
+        double length2 = PointCalculator.getLength(vector2);
         return Math.acos(scalar / (length1 * length2 + 0.01));
     }
 
-    private void drawEnds(IGContext context, IPoint center, IPoint shellPoint1) {
+
+    private void drawEnds(IGContext context, IPoint center, IPoint shellPoint1, IPoint shellPoint2) {
         double x_r_old = 0;
         double y_r_old = 0;
         final double step = 0.1;

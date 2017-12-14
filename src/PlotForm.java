@@ -186,7 +186,7 @@ class Canvas extends JPanel {
     private List<IPoint> activeComponentList = new ArrayList<>();
     IPoint nearest;
     IPoint oldPoint;
-    IPoint aPoint = new ActivePointDecorator(new Point(15, 10));
+    IPoint aPoint = new ActivePointDecorator(new Point(15, 130));
     IPoint bPoint = new ActivePointDecorator(new Point(300, 70));
     IPoint cPoint = new ActivePointDecorator(new Point(250, 300));
     IPoint dPoint = new ActivePointDecorator(new Point(450, 400));
