@@ -106,7 +106,8 @@ public class ShellDecorator implements IVisualCurve {
     private IPoint getMiddlePoint(IPoint shellPoint1_old, float step, float i, IPoint shellPoint1) {
         IPoint middlePoint_outer = new Point((shellPoint1_old.getX() + shellPoint1.getX()) / 2, (shellPoint1_old.getY() + shellPoint1.getY()) / 2);
         IPoint middlePoint_inner = component.getPoint(i - step / 2);
-        return new Point((middlePoint_outer.getX() - middlePoint_inner.getX()) * 1.4 + middlePoint_inner.getX(), (middlePoint_outer.getY() - middlePoint_inner.getY()) * 1.4 + middlePoint_inner.getY());
+        double distance = PointCalculator.getDistance(middlePoint_inner, middlePoint_outer);
+        return new Point((middlePoint_outer.getX() - middlePoint_inner.getX()) * (margin / distance) + middlePoint_inner.getX(), (middlePoint_outer.getY() - middlePoint_inner.getY()) * (margin / distance) + middlePoint_inner.getY());
     }
 
     @SuppressWarnings("SameParameterValue")
