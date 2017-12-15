@@ -6,7 +6,7 @@ import Visual.IActiveComponent;
 /**
  * Created by Vasily Danilin on 08.12.2017.
  */
-public class ActivePointDecorator implements IPoint, IActiveComponent {
+public class ActivePointDecorator implements IActiveComponent {
     private IPoint component;
 
     public ActivePointDecorator(IPoint component) {

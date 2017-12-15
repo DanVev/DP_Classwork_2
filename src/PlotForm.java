@@ -1,15 +1,17 @@
+import Composite.Chain;
 import Contexts.Graphics2DContext;
 import Contexts.Graphics2DDottedContext;
 import Contexts.IGContext;
 import Contexts.SVGContext;
 import Decorators.ActivePointDecorator;
 import Decorators.ShellDecorator;
-import Drawable.*;
+import Drawable.ICurve;
+import Drawable.IPoint;
+import Drawable.Line;
 import Drawable.Point;
 import Visual.IActiveComponent;
 import Visual.IVisualCurve;
 import Visual.VisualCurve;
-import Composite.Chain;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +20,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -160,17 +162,21 @@ public class PlotForm {
         jPanelGeneral.add(jPanel2, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(500, 500), new Dimension(500, 500), null, 0, false));
         jPanelGeneral.add(jPanel1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(500, 500), new Dimension(500, 500), null, 0, false));
         final JLabel label1 = new JLabel();
-        label1.setText("Line Curve");
+        label1.setText("Standard Paint");
         jPanelGeneral.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
-        label2.setText("Bezier Curve");
+        label2.setText("Dotted Paint");
         jPanelGeneral.add(label2, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         svgButton1 = new JButton();
         svgButton1.setEnabled(false);
         svgButton1.setText("Save as SVG file");
-        jPanelGeneral.add(svgButton1, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        ButtonGroup buttonGroup;
-        buttonGroup = new ButtonGroup();
+        jPanelGeneral.add(svgButton1, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        undoButton1 = new JButton();
+        undoButton1.setText("Undo");
+        jPanelGeneral.add(undoButton1, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        undoButton2 = new JButton();
+        undoButton2.setText("Undo");
+        jPanelGeneral.add(undoButton2, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
@@ -185,13 +191,13 @@ class Canvas extends JPanel {
     private boolean isDotted;
     private boolean isFirst = true;
     ICurve main;
-    private List<IPoint> activeComponentList = new ArrayList<>();
+    private List<IActiveComponent> activeComponentList = new ArrayList<>();
     IPoint nearest;
     IPoint oldPoint;
-    IPoint aPoint = new ActivePointDecorator(new Point(15, 130));
-    IPoint bPoint = new ActivePointDecorator(new Point(300, 70));
-    IPoint cPoint = new ActivePointDecorator(new Point(250, 300));
-    IPoint dPoint = new ActivePointDecorator(new Point(450, 400));
+    IActiveComponent aPoint = new ActivePointDecorator(new Point(15, 130));
+    IActiveComponent bPoint = new ActivePointDecorator(new Point(300, 70));
+    IActiveComponent cPoint = new ActivePointDecorator(new Point(250, 300));
+    IActiveComponent dPoint = new ActivePointDecorator(new Point(450, 400));
     Line a = new Line(aPoint, bPoint);
     Line b = new Line(bPoint, cPoint);
     Line c = new Line(cPoint, dPoint);
@@ -212,7 +218,7 @@ class Canvas extends JPanel {
 
     }
 
-    public List<IPoint> getActiveComponentList() {
+    public List<IActiveComponent> getActiveComponentList() {
         return activeComponentList;
     }
 
