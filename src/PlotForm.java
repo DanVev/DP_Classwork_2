@@ -30,6 +30,8 @@ public class PlotForm {
     private JPanel jPanel1;
     private JPanel jPanel2;
     private JButton svgButton1;
+    private JButton undoButton1;
+    private JButton undoButton2;
     private Canvas canvas1 = new Canvas(false);
     private Canvas canvas2 = new Canvas(true);
 
