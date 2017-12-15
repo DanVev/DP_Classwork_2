@@ -1,3 +1,4 @@
+import Commands.CommandManager;
 import Commands.ICommand;
 import Commands.PointShiftCommand;
 import Composite.Chain;
@@ -55,6 +56,13 @@ public class PlotForm {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 saveSVG("./svg1.svg", canvas1.main);
+            }
+        });
+        undoButton1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                CommandManager.getInstance().undo();
             }
         });
     }

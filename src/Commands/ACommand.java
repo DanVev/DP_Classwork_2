@@ -16,4 +16,9 @@ abstract public class ACommand implements ICommand {
     }
 
     abstract void doExecute();
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
