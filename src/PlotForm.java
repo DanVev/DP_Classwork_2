@@ -1,3 +1,5 @@
+import Commands.ICommand;
+import Commands.PointShiftCommand;
 import Composite.Chain;
 import Contexts.Graphics2DContext;
 import Contexts.Graphics2DDottedContext;
@@ -125,8 +127,8 @@ public class PlotForm {
 
     private void moveNearest(MouseEvent e, Canvas panel) {
         IPoint point = panel.nearest;
-        point.setX(point.getX() + (e.getX() - panel.oldPoint.getX()));
-        point.setY(point.getY() + (e.getY() - panel.oldPoint.getY()));
+        ICommand shiftCommand = new PointShiftCommand(point, new Point(e.getX() - panel.oldPoint.getX(), e.getY() - panel.oldPoint.getY()));
+        shiftCommand.execute();
         panel.repaint();
     }
 
