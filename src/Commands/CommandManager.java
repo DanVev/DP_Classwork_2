@@ -8,10 +8,12 @@ import java.util.List;
  */
 public class CommandManager {
     private static CommandManager instance = null;
-    private List<ICommand> list;
+    private List<ACommand> list;
+    private List<ICommand> initList;
 
     private CommandManager() {
         list = new ArrayList<>();
+        List<ICommand> initList = new ArrayList<>();
     }
 
     public static CommandManager getInstance() {
@@ -20,13 +22,21 @@ public class CommandManager {
         return instance;
     }
 
-    public void registry(ICommand command) {
+    public void registry(ACommand command) {
         list.add(command);
     }
 
     public void undo() {
-        list.remove(list.size() - 1);
-        for (ICommand c : list)
-            c.execute();
+        if (list.size() > 8) {
+            list.remove(list.size() - 1);
+            //this.reset();
+            for (ACommand c : list)
+                c.doExecute();
+        }
+    }
+
+
+    void addToInitState(ICommand command) {
+        initList.add(command);
     }
 }

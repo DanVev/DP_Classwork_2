@@ -3,7 +3,7 @@ package Commands;
 /**
  * Created by Vasily Danilin on 15.12.2017.
  */
-abstract public class ACommand implements ICommand {
+abstract public class ACommand implements ICommand, Cloneable {
     @Override
     public final void execute() {
         CommandManager commandManager = CommandManager.getInstance();
@@ -15,10 +15,6 @@ abstract public class ACommand implements ICommand {
         doExecute();
     }
 
-    abstract void doExecute();
+    abstract protected void doExecute();
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }

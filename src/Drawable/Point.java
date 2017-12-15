@@ -39,4 +39,9 @@ public class Point implements IPoint {
                 ", " + y +
                 ')';
     }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

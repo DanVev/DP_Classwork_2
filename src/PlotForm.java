@@ -1,5 +1,6 @@
 import Commands.CommandManager;
 import Commands.ICommand;
+import Commands.PointInitCommand;
 import Commands.PointShiftCommand;
 import Composite.Chain;
 import Contexts.Graphics2DContext;
@@ -36,7 +37,6 @@ public class PlotForm {
     private JPanel jPanel2;
     private JButton svgButton1;
     private JButton undoButton1;
-    private JButton undoButton2;
     private Canvas canvas1 = new Canvas(false);
     private Canvas canvas2 = new Canvas(true);
 
@@ -63,6 +63,7 @@ public class PlotForm {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 CommandManager.getInstance().undo();
+                jPanelGeneral.repaint();
             }
         });
     }
@@ -183,10 +184,7 @@ public class PlotForm {
         jPanelGeneral.add(svgButton1, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         undoButton1 = new JButton();
         undoButton1.setText("Undo");
-        jPanelGeneral.add(undoButton1, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        undoButton2 = new JButton();
-        undoButton2.setText("Undo");
-        jPanelGeneral.add(undoButton2, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        jPanelGeneral.add(undoButton1, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
@@ -208,6 +206,7 @@ class Canvas extends JPanel {
     IActiveComponent bPoint = new ActivePointDecorator(new Point(300, 70));
     IActiveComponent cPoint = new ActivePointDecorator(new Point(250, 300));
     IActiveComponent dPoint = new ActivePointDecorator(new Point(450, 400));
+
     Line a = new Line(aPoint, bPoint);
     Line b = new Line(bPoint, cPoint);
     Line c = new Line(cPoint, dPoint);
@@ -221,6 +220,14 @@ class Canvas extends JPanel {
         activeComponentList.add(bPoint);
         activeComponentList.add(cPoint);
         activeComponentList.add(dPoint);
+        ICommand aCommand = new PointInitCommand(aPoint);
+        ICommand bCommand = new PointInitCommand(bPoint);
+        ICommand cCommand = new PointInitCommand(cPoint);
+        ICommand dCommand = new PointInitCommand(dPoint);
+        aCommand.execute();
+        bCommand.execute();
+        cCommand.execute();
+        dCommand.execute();
 
         System.out.println("do");
 

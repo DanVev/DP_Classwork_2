@@ -15,8 +15,13 @@ public class PointShiftCommand extends ACommand {
         this.coords = new Point(shift.getX(), shift.getY());
     }
 
+    public PointShiftCommand(IPoint point, double x, double y) {
+        this.point = point;
+        this.coords = new Point(x, y);
+    }
+
     @Override
-    void doExecute() {
+    protected void doExecute() {
         point.setX(point.getX() + coords.getX());
         point.setY(point.getY() + coords.getY());
     }
